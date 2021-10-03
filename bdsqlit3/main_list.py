@@ -1,10 +1,14 @@
 #-------------no terminado-----------------  
+#date time para hacer un timestamp
+
+import datetime from datetime
 import pandas as pd
 import sqlite3
 
-con = sqlite3.connect("C:\\Users\\Elian Gonzalez\\Desktop\\db-py\\registro_covid_19\\gestor de datos covid 19\\bdsqlit3\\DB\\vacunas")
+con = sqlite3.connect("DB\\vacunas")
 
 
+# 
 #-------------------------------FUNCIONES-----------------------------
 
 
@@ -18,10 +22,13 @@ def Mostrar_Vacunas():
 
 def Buscar_vacunado():
     x=input('ingrese el DNI: ')
+    datos=con.execute('SELECT nombre, dni, vacuna as vacuna_aplicada, dosis as numero_de_dosis, fecha_vacunacion FROM personas inner join registros_vac on persona.id=registros_vac.id inner join vacuna on vacuna.id=registros_vac.id where id =%s',(x))
+    datos.fetchone['dni']
     for i in registro:
-        if x == i[0][2]:
-            print('=' * 30)
-            print(f'Apellido:{i[0][1]} \n Nombre:{i[0][0]} \n D.N.I:{i[0][2]} \n Vacuna aplicada:{i[1][0]}\n N°de dosis:{i[2]} \n fecha de inmunizacion:{i[3]} ')
+            print('=' * 30)   
+            print(datos)    
+            #print(f'Apellido:{i[0][1]} \n Nombre:{i[0][0]} \n D.N.I:{i[0][2]} \n Vacuna aplicada:{i[1][0]}\n N°de dosis:{i[2]} \n fecha de inmunizacion:{i[3]} ')
+            print(datos)
             print('=' * 30)
             print()
 
@@ -56,7 +63,11 @@ def Crear_Persona():
     new_apellido=input('ingrese el nuevo apellido: ')
     new_dni=input('ingrese el nuevo D.N.I: ')
     new_direccion=input('ingrse la nueva direccion: ')
-    personas.append([new_nombre,new_apellido,new_dni,new_direccion])
+    #no completo
+    insert=pd.read_sql_query('INSERT INTO personas ( id,nombre,apellido,dni,domicilio,fecha_nac,telefono,fecha_creacion) VALUES (NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);')
+    
+    
+    #personas.append([new_nombre,new_apellido,new_dni,new_direccion])
 
 
 def Mostrar_Registro():
