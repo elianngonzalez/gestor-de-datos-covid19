@@ -57,7 +57,7 @@ def Mostrar_Registro_2a_dosis():
     print(datos)
     print('=' * 30)
 
-
+#esto se hace con un formulario de html
 def Crear_Persona():
     new_nombre=input('ingrese el nuevo nombre:')
     new_apellido=input('ingrese el nuevo apellido: ')
