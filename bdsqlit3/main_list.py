@@ -46,18 +46,16 @@ def Mostar_Personas():
 
 
 def Mostrar_Registro_1a_dosis():
-    for registrado in registro:
-        if registrado[2] == 1:
-            print('=' * 30)
-            print(f'Apellido:{registrado[0][1]} \n Nombre:{registrado[0][0]} \n D.N.I:{registrado[0][2]} \n Vacuna aplicada:{registrado[1][0]}\n N°de dosis:{registrado[2]} \n fecha de inmunizacion:{registrado[3]} ')
-            print('=' * 30)
+    datos=con.execute('SELECT nombre, dni, vacuna as vacuna_aplicada, dosis as numero_de_dosis, fecha_vacunacion FROM personas inner join registros_vac on persona.id=registros_vac.id inner join vacuna on vacuna.id=registros_vac.id where dosis = 1')
+    print('=' * 30)
+    print(datos)
+    print('=' * 30)
 
 def Mostrar_Registro_2a_dosis():
-    for registrad in registro:
-        if registrad[2] == 2 :
-            print('=' * 30)
-            print(f'Apellido:{registrad[0][1]} \n Nombre:{registrad[0][0]} \n D.N.I:{registrad[0][2]} \n Vacuna aplicada:{registrad[1][0]} \n fecha de inmunizacion:{registrad[3]} ')
-            print('=' * 30)
+    datos=con.execute('SELECT nombre, dni, vacuna as vacuna_aplicada, dosis as numero_de_dosis, fecha_vacunacion FROM personas inner join registros_vac on persona.id=registros_vac.id inner join vacuna on vacuna.id=registros_vac.id where dosis = 2')
+    print('=' * 30)
+    print(datos)
+    print('=' * 30)
 
 
 def Crear_Persona():
