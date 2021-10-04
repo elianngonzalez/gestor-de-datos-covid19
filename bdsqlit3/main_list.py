@@ -1,14 +1,19 @@
-#-------------no terminado-----------------  
-#date time para hacer un timestamp
 
-import datetime from datetime
+#-------------no terminado-----------------  
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_mysqldb import MySQL
+#date time para hacer un timestamp
+#import datetime
 import pandas as pd
 import sqlite3
 
 con = sqlite3.connect("DB\\vacunas")
+app= Flask(__name__)
+
+#configuraciones
+app.secret_key = "mysecretkey"
 
 
-# 
 #-------------------------------FUNCIONES-----------------------------
 
 
@@ -23,14 +28,11 @@ def Mostrar_Vacunas():
 def Buscar_vacunado():
     x=input('ingrese el DNI: ')
     datos=con.execute('SELECT nombre, dni, vacuna as vacuna_aplicada, dosis as numero_de_dosis, fecha_vacunacion FROM personas inner join registros_vac on persona.id=registros_vac.id inner join vacuna on vacuna.id=registros_vac.id where id =%s',(x))
-    datos.fetchone['dni']
-    for i in registro:
-            print('=' * 30)   
-            print(datos)    
-            #print(f'Apellido:{i[0][1]} \n Nombre:{i[0][0]} \n D.N.I:{i[0][2]} \n Vacuna aplicada:{i[1][0]}\n N°de dosis:{i[2]} \n fecha de inmunizacion:{i[3]} ')
-            print(datos)
-            print('=' * 30)
-            print()
+    #datos.fetchone['dni']
+    print('=' * 30)   
+    print(datos)    
+    print('=' * 30)
+    print()
 
 
 def Mostar_Personas():
