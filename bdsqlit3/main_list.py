@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 #import datetime
 import pandas as pd
 import sqlite3
-from personas import *
+
 
 
 con = sqlite3.connect("DB\\vacunas")
