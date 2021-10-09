@@ -1,0 +1,73 @@
+{% extends "vacunas/layout.html" %} {% block body %}
+
+<div class="row">
+    <div class="col-md-5">
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+        <div class="card card-body">
+            <form action="{{url_for('add_vacuna')}}" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="fullname" placeholder="FullName">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="dosis" placeholder="dosis">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="intervalo" placeholder="intervalo">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="edad_minima" placeholder="edad minima">
+                </div>
+                <select name="estado" class="custom-select" id="inputGroupSelect01">
+                    <option value={{estado.0}}>activa</option>
+                    <option value={{estado.1}}>discontinua</option>
+                    <option value={{estado.3}}>no activa</option>
+                    <option value={{estado.4}}>sin stock</option>
+                </select>
+                <button class="btn btn-primary btn-block">
+                Save 
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <table class="table table-bordered table-dark">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>fullname</td>
+                    <td>dosis</td>
+                    <td>edad_minima</td>
+                    <td>estado</td>
+                    <td>intervalo en dias</td>
+                    <td>Operations</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vacuna in vacunas %}
+                <tr>
+                    <td>{{vacuna.0}}</td>
+                    <td>{{vacuna.1}}</td>
+                    <td>{{vacuna.2}}</td>
+                    <td>{{vacuna.3}}</td>
+                    <td>{{vacuna.4}}</td>
+                    <td>{{vacuna.5}}</td>
+                    <td>
+                        <a href="/edit/{{vacuna.0}}" class="btn btn-secondary">edit</a>
+                        <a href="/delete/{{vacuna.0}}" class="btn btn-danger btn-delete">delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+{% endblock %}

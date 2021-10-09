@@ -1,0 +1,35 @@
+{% extends "personas/layout-personas.html" %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card card-body">
+            <form action="/update/{{persona.0}}" method="POST">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="nombre" placeholder="nombre">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="apellido" placeholder="apellido">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="dni" placeholder="dni">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="domicilio" placeholder="domicilio">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="date" id="start" name="fech_d_nac" value="fecha de nacimiento">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="telefono" placeholder="edad minima">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                Actualizar
+            </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
