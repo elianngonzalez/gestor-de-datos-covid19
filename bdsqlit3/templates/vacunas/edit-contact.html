@@ -1,0 +1,35 @@
+{% extends "vacunas/layout.html" %} {% block body %}
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card card-body">
+            <form action="/update/{{vacuna.0}}" method="POST">
+                <div class="form-group">
+                    <input type="text" name="fullname" value="{{vacuna.1}}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="dosis" value="{{vacuna.3}}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="intervalo" value="{{vacuna.2}}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="edad_minima" value="{{vacuna.4}}" class="form-control">
+                </div>
+                <select name="estado" class="custom-select" id="inputGroupSelect01">
+                    <option value="{{estados.0}}">activa</option>
+                    <option value="{{estados.1}}">discontinua</option>
+                    <option value="{{estados.3}}">no activa</option>
+                    <option value="{{estados.4}}">sin stock</option>
+                </select>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                Actualizar
+            </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
