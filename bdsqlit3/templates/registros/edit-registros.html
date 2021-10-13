@@ -17,10 +17,9 @@
                     <input type="text" name="edad_minima" value="{{vacuna.4}}" class="form-control">
                 </div>
                 <select name="estado" class="custom-select" id="inputGroupSelect01">
-                    <option value="{{estados.0}}">activa</option>
-                    <option value="{{estados.1}}">discontinua</option>
-                    <option value="{{estados.3}}">no activa</option>
-                    <option value="{{estados.4}}">sin stock</option>
+                    {% for estado in estados %}
+                    <option value={{estado.0}}>{{estado.1}}</option>
+                    {% endfor %}
                 </select>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">

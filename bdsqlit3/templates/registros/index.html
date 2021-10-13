@@ -1,4 +1,4 @@
-{% extends "vacunas/layout.html" %} {% block body %}
+{% extends "registros/layout.html" %} {% block body %}
 
 <div class="row">
     <div class="col-md-5">
@@ -11,16 +11,19 @@
         </div>
         {% endfor %} {% endif %} {% endwith %}
         <div class="card card-body">
-            <form action="{{url_for('add_vacuna')}}" method="POST">
+            <form action="{{url_for('add_registro')}}" method="POST">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="fullname" placeholder="FullName">
+                    <input type="date" class="form-control" name="fecha" placeholder="Fecha">
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" name="dosis" placeholder="dosis">
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="intervalo" placeholder="intervalo">
-                </div>
+
+                <select name="estado" class="custom-select" id="inputGroupSelect01">
+                    {% for persona in personas %}
+                    <option value=>{{persona['nombre']}} {{persona['apellido']}}</option>
+                    {% endfor %}
+                    </select>
                 <div class="form-group">
                     <input type="text" class="form-control" name="edad_minima" placeholder="edad minima">
                 </div>
@@ -40,26 +43,28 @@
             <thead>
                 <tr>
                     <td>ID</td>
-                    <td>fullname</td>
+                    <td>fecha</td>
                     <td>dosis</td>
-                    <td>edad_minima</td>
-                    <td>estado</td>
-                    <td>intervalo en dias</td>
+                    <td>persona</td>
+                    <td>vacuna</td>
+                    <td>vacunatorio</td>
+                    <td>lote</td>
                     <td>Operations</td>
                 </tr>
             </thead>
             <tbody>
-                {% for vacuna in vacunas %}
+                {% for registro in registros %}
                 <tr>
-                    <td>{{vacuna.0}}</td>
-                    <td>{{vacuna.1}}</td>
-                    <td>{{vacuna.2}}</td>
-                    <td>{{vacuna.3}}</td>
-                    <td>{{vacuna.4}}</td>
-                    <td>{{vacuna.5}}</td>
+                    <td>{{registro.0}}</td>
+                    <td>{{registro.1}}</td>
+                    <td>{{registro.2}}</td>
+                    <td>{{registro.3}} {{registro.4}}</td>
+                    <td>{{registro.5}}</td>
+                    <td>{{registro.6}}</td>
+                    <td>{{registro.7}}</td>
                     <td>
-                        <a href="/edit/{{vacuna.0}}" class="btn btn-secondary">edit</a>
-                        <a href="/delete/{{vacuna.0}}" class="btn btn-danger btn-delete">delete</a>
+                        <a href="/edit/{{registro.0}}" class="btn btn-secondary">edit</a>
+                        <a href="/delete/{{registro.0}}" class="btn btn-danger btn-delete">delete</a>
                     </td>
                 </tr>
                 {% endfor %}

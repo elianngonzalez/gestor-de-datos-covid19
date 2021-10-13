@@ -16,6 +16,11 @@ app.secret_key = "mysecretkey"
 
 
 #-------------------------------FUNCIONES y RUTAS-----------------------------
+def get_db():
+    con = sqlite3.connect("DB/vacunas")
+    con.row_factory = sqlite3.Row
+    return con
+
 
 
 # routes
@@ -23,12 +28,13 @@ app.secret_key = "mysecretkey"
 def deciciones():
     return render_template('index.html')
 
+#-----------------------------VACUNAS-----------------------------------------
 @app.route('/vacunas')
 def Vacunas():
     con = sqlite3.connect("DB/vacunas")
     data=con.execute('SELECT id, nombre, dosis,edad_min,estado_id,intervalo FROM vacunas')
     est=con.execute('SELECT * FROM estado WHERE id')
-    return render_template('vacunas/index.html', vacunas = data, estado=est)
+    return render_template('vacunas/index.html', vacunas = data, estados=est)
 
 @app.route('/add_vacuna', methods=['POST'])
 def add_vacuna():
@@ -54,7 +60,7 @@ def get_vacuna(id):
     est=cur.fetchall()
     cur.close()
     print(data)
-    return render_template('vacunas/edit-contact.html', vacuna = data[0], estados=est)
+    return render_template('vacunas/edit-vacuna.html', vacuna = data[0], estados=est)
 
 @app.route('/update/<id>', methods=['POST'])
 def update_vacuna(id):
@@ -96,10 +102,10 @@ def add_Personas():
         apellido = request.form['apellido']
         dni = request.form['dni']
         domicilio = request.form['domicilio']
-        fech_nac = request.form['fecha_d_nac']
-        telefono = request.form['telefono']
+        fech_nac = request.form['fecha']
+        telef = request.form['telefono']
         con = sqlite3.connect("DB/vacunas")
-        con.execute("INSERT INTO personas (nombre,apellido,dni,domicilio,fecha_nac,telefono) VALUES ", (nombre,apellido,dni,domicilio,fech_nac,telefono))
+        con.execute("INSERT INTO personas (nombre,apellido,dni,domicilio,fecha_nac,telefono) VALUES (?,?,?,?,?,?)", (nombre,apellido,dni,domicilio,fech_nac,telef))
         con.commit()
         flash('Persona agregada correctamente')
         return redirect(url_for('IndexPersonas'))
@@ -134,6 +140,70 @@ def update_Personas(id):
 
 @app.route('/delete_persona/<string:id>', methods = ['POST', 'GET'])
 def delete_Personas(id):
+    con = sqlite3.connect("DB/vacunas")
+    cur = con.cursor()
+    cur.execute('DELETE FROM personas WHERE id = {0}'.format(id))
+    con.commit()
+    flash('Persona Removida Correctamente')
+    return redirect(url_for('IndexPersonas'))
+
+
+#-------------------------------------------REGISTROS----------------------------
+
+@app.route('/registros')
+def IndexRegistros():
+    con = get_db()
+    data=con.execute('select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id)')
+    est=con.execute('SELECT * FROM estado WHERE id')
+    pers = con.execute('SELECT id,nombre , apellido FROM personas') 
+    return render_template('registros/index.html', registros = data , estados=est , personas=pers)
+
+
+@app.route('/add_registro', methods = ['POST'])
+def add_registro():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        dni = request.form['dni']
+        domicilio = request.form['domicilio']
+        fech_nac = request.form['fecha']
+        telef = request.form['telefono']
+        con = sqlite3.connect("DB/vacunas")
+        con.execute("INSERT INTO personas (nombre,apellido,dni,domicilio,fecha_nac,telefono) VALUES (?,?,?,?,?,?)", (nombre,apellido,dni,domicilio,fech_nac,telef))
+        con.commit()
+        flash('Persona agregada correctamente')
+        return redirect(url_for('IndexRegistros'))
+
+@app.route('/edit_registro/<id>', methods = ['POST', 'GET'])
+def get_registro(id):
+    con = sqlite3.connect("DB/vacunas")
+    cur=con.cursor() 
+    cur.execute('SELECT * FROM personas WHERE id = ?', (id))
+    data=cur.fetchall()
+    cur.close()
+    print(data)
+    return render_template('personas/edit-personas.html', vacuna = data[0])
+
+
+@app.route('/update_registro/<id>', methods = ['POST'])
+def update_registro(id):
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        dni = request.form['dni']
+        domicilio = request.form['domicilio']
+        fech_nac = request.form['fecha_d_nac']
+        telefono = request.form['telefono']   
+        con = sqlite3.connect("DB/vacunas")
+        cur = con.cursor()
+        cur.execute("UPDATE personas SET nombre=?,apellido=?,dni=?,domicilio=?,fecha_nac=?,telefono=? WHERE id = ?", (nombre,apellido,dni,domicilio,fech_nac,telefono, id))
+        con.commit()
+        flash('Vacuna editada correctamente')
+        return redirect(url_for('IndexPersonas'))
+
+
+@app.route('/delete_persona/<string:id>', methods = ['POST', 'GET'])
+def delete_registros(id):
     con = sqlite3.connect("DB/vacunas")
     cur = con.cursor()
     cur.execute('DELETE FROM personas WHERE id = {0}'.format(id))
