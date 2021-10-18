@@ -6,8 +6,8 @@
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         {% endfor %} {% endif %} {% endwith %}
         <div class="card card-body">
@@ -23,7 +23,7 @@
                     {% for persona in personas %}
                     <option value=>{{persona['nombre']}} {{persona['apellido']}}</option>
                     {% endfor %}
-                    </select>
+                </select>
                 <div class="form-group">
                     <input type="text" class="form-control" name="edad_minima" placeholder="edad minima">
                 </div>
@@ -33,12 +33,25 @@
                     {% endfor %}
                 </select>
                 <button class="btn btn-primary btn-block">
-                Save 
+                    Save
                 </button>
             </form>
         </div>
     </div>
     <div class="col-md-7">
+        <div>
+            <form action="{{url_for('indexConsulta2')}}" method="POST">
+                <input type="search" name="bus" placeholder="nombre">
+                <input type="search" name="bus_apell" placeholder="apellido3">
+                <label for="">filtrar por fecha</label>
+                <input type="date" name="fecha_desde" id="desde">
+                <input type="date" name="fecha_hasta" id="hasta">
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    buscar
+                    </button>
+            </form>
+        </div>
         <table class="table table-bordered table-dark">
             <thead>
                 <tr>

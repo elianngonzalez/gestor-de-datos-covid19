@@ -16,11 +16,14 @@ app.secret_key = "mysecretkey"
 
 
 #-------------------------------FUNCIONES y RUTAS-----------------------------
-def get_db():
+def get_db_biblioteca():
     con = sqlite3.connect("DB/vacunas")
     con.row_factory = sqlite3.Row
     return con
 
+def get_db():
+    con = sqlite3.connect("DB/vacunas")
+    return con
 
 
 # routes
@@ -94,6 +97,39 @@ def IndexPersonas():
     data=con.execute('SELECT id,nombre,apellido,dni,domicilio,fecha_nac,telefono FROM personas ')
     return render_template('personas/index-personas.html', personas = data)
 
+@app.route('/consulta', methods = ['POST','GET'])
+def indexConsulta():
+    filtro1 = [request.form.get('bus')]
+    #input error none
+    print(filtro1)
+    con=get_db()
+    cur=con.cursor()
+    dato=cur.execute("SELECT id,nombre,apellido,dni,domicilio,fecha_nac,telefono FROM personas WHERE nombre LIKE '{0}%'".format(filtro1)) 
+    return render_template('personas/index-personas copy.html', personas = dato)
+
+@app.route('/consulta2', methods = ['POST'])
+def indexConsulta2():
+    print(request.form)
+    filtro = "where 1=1 "
+    valores = []
+    filtro_nombre =  request.form['bus']
+    if filtro_nombre != "":
+        filtro = filtro +  " and nombre LIKE '%'||?||'%'" 
+        valores.append(filtro_nombre)
+
+
+    filtro_apellido =  request.form['bus_apell']
+    if filtro_apellido != "":
+        filtro = filtro +  " and apellido LIKE '%'||?||'%'" 
+        valores.append(filtro_apellido)
+    
+    
+    print(filtro)
+    con=get_db()
+    cur=con.cursor()
+    dato=cur.execute("SELECT id,nombre,apellido,dni,domicilio,fecha_nac,telefono FROM personas "+filtro,(valores)) 
+    return render_template('personas/personas_filtro.html', personas = dato)
+
 
 @app.route('/add_persona', methods = ['POST'])
 def add_Personas():
@@ -156,6 +192,10 @@ def IndexRegistros():
     data=con.execute('select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id)')
     est=con.execute('SELECT * FROM estado WHERE id')
     pers = con.execute('SELECT id,nombre , apellido FROM personas') 
+    
+    
+    
+    
     return render_template('registros/index.html', registros = data , estados=est , personas=pers)
 
 
