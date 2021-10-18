@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 #date time para hacer un timestamp
 #import datetime
-import pandas as pd
+#import pandas as pd
 import sqlite3
 
 
