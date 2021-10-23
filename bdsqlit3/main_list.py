@@ -1,6 +1,6 @@
 
 #-------------no terminado-----------------  
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response 
 #date time para hacer un timestamp
 #import datetime
 #import pandas as pd
@@ -30,6 +30,8 @@ def get_db():
 @app.route('/')
 def deciciones():
     return render_template('index.html')
+    #return render_template('login/index_login.html')
+
 
 #-----------------------------VACUNAS-----------------------------------------
 @app.route('/vacunas')
@@ -186,15 +188,44 @@ def delete_Personas(id):
 
 #-------------------------------------------REGISTROS----------------------------
 
-@app.route('/registros')
+@app.route('/registros' , methods = ['POST','GET'])
 def IndexRegistros():
     con = get_db()
     data=con.execute('select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id)')
     est=con.execute('SELECT * FROM estado WHERE id')
     pers = con.execute('SELECT id,nombre , apellido FROM personas') 
-    
-    
-    
+    #fitrar registros por consulta de fecha
+    if request.method == 'POST':
+        print(request.form)
+        filtro = "where 1=1 "
+        valores = []
+        filtro_nombre =  request.form['bus']
+        if filtro_nombre != "":
+            filtro = filtro +  " and personas.nombre LIKE '%'||?||'%'" 
+            valores.append(filtro_nombre)
+
+
+        filtro_apellido =  request.form['bus_apell']
+        if filtro_apellido != "":
+            filtro = filtro +  " and personas.apellido LIKE '%'||?||'%'" 
+            valores.append(filtro_apellido)
+
+
+        valor_fecha = []
+        filtro_fecha =  " and registros_vac.fecha_vacunacion "
+        
+        fecha_desde = request.form['fecha_desde']
+        fecha_hasta = request.form['fecha_hasta']
+        if fecha_desde != "" and fecha_hasta != "":
+            filtro_fecha = filtro_fecha + " BETWEEN ? AND ? "
+            valores.append(fecha_desde)
+            valores.append(fecha_hasta)
+
+        print(valor_fecha , valores)
+        cur=con.cursor()
+        dato=cur.execute("select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id) "+ filtro + filtro_fecha,(valores)) 
+        print(dato)
+        return render_template('registros/index.html', registros = dato)
     
     return render_template('registros/index.html', registros = data , estados=est , personas=pers)
 
@@ -250,6 +281,31 @@ def delete_registros(id):
     con.commit()
     flash('Persona Removida Correctamente')
     return redirect(url_for('IndexPersonas'))
+
+#--------------------------------------------PRUEVAS---------------------------SECIONES-------------
+
+
+#COoKIES
+
+@app.route('/setcookie', methods = ['POST'])
+def set_cookie():
+    user = request.form.get('emailuser')
+    
+    resp = make_response(render_template('login/cookie.html'))
+    
+    resp.set_cookie('userID', user)
+    
+    print('resp:', resp)
+    
+    return resp
+
+@app.route('/getcookie')
+def get_cookie():
+    name = request.cookies.get('userID')
+    if (name == None):
+        return 'no hay Cookie de usuario'
+    else:
+        return '<h1>BIENVENIDO ' + name + '</h1>'
 
 
 
