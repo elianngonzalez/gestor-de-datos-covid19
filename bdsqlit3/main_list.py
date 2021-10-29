@@ -221,6 +221,9 @@ def IndexRegistros():
             valores.append(fecha_desde)
             valores.append(fecha_hasta)
 
+
+        
+        
         print(valor_fecha , valores)
         cur=con.cursor()
         dato=cur.execute("select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id) "+ filtro + filtro_fecha,(valores)) 
@@ -230,8 +233,19 @@ def IndexRegistros():
     return render_template('registros/index.html', registros = data , estados=est , personas=pers)
 
 
+@app.route('/group_by', methods = ['POST' ,'GET'])
+def By_Grupos():
+    con = get_db_biblioteca()
+    dato = con.execute('SELECT nombre_vacunatorio , count(nombre) as inmunizados FROM registros_completos GROUP by nombre')
+    pass
+
+
+
 @app.route('/add_registro', methods = ['POST'])
 def add_registro():
+    #mostar la tabla de personas, hacer un search para buscarla
+    #si no se encuentra que me permita realizar un alta de la persona  
+    
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']

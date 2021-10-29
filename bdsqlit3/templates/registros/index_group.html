@@ -10,52 +10,23 @@
             </button>
         </div>
         {% endfor %} {% endif %} {% endwith %}
-        <div class="card card-body">
-            <form action="{{url_for('add_registro')}}" method="POST">
-                <div class="form-group">
-                    <input type="date" class="form-control" name="fecha" placeholder="Fecha">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="dosis" placeholder="dosis">
-                </div>
-
-                <select name="estado" class="custom-select" id="inputGroupSelect01">
-                    {% for persona in personas %}
-                    <option value=>{{persona['nombre']}} {{persona['apellido']}}</option>
-                    {% endfor %}
-                </select>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="edad_minima" placeholder="edad minima">
-                </div>
-                <select name="estado" class="custom-select" id="inputGroupSelect01">
-                    {% for estado in estados %}
-                    <option value={{estado.0}}>{{estado.1}}</option>
-                    {% endfor %}
-                </select>
-                <button class="btn btn-primary btn-block">
-                    Save
-                </button>
-            </form>
-        </div>
+        
     </div>
     <div class="col-md-7">
         <div class="container ">
             <form action="{{url_for('IndexRegistros')}}" method="POST">
-                <input type="search" name="bus" placeholder="nombre">
-                <input type="search" name="bus_apell" placeholder="apellido3">
                 <label for="">filtrar por fecha</label>
                 <input type="date" name="fecha_desde" id="desde">
                 <input type="date" name="fecha_hasta" id="hasta">
                 <label for="">filtro por grupo</label>
-                <!--select name="" class="custom-select" id="inputGroupSelect01">
+                <select name="" class="custom-select" id="inputGroupSelect01">
                     <option value=""></option>
                 </select>
-                <input type="date" name="fecha_hasta" id="hasta"-->
+                <input type="date" name="fecha_hasta" id="hasta">
+                
                 <button type="submit" class="btn btn-primary btn-block">
                     buscar
                     </button>
-
-                <button type="submit" class="btn btn-primary btn-block">N° vacunados por vacunatorio</button>
             </form>
         </div>
         <table class="table table-bordered table-dark">
