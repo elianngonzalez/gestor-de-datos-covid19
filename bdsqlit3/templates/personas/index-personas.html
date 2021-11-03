@@ -72,8 +72,10 @@
                     <td>{{persona.6}}</td>
 
                     <td>
-                        <a href="/edit/{{persona.0}}" class="btn btn-secondary">edit</a>
-                        <a href="/delete/{{persona.0}}" class="btn btn-danger btn-delete">delete</a>
+                        <div class="btn-group-vertical btn-group-sm">
+                            <a href="/edit/{{persona.0}}" class="btn btn-secondary">edit</a>
+                            <a href="/delete/{{persona.0}}" class="btn btn-danger btn-delete">delete</a>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}

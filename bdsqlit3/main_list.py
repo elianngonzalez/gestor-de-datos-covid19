@@ -36,9 +36,10 @@ def deciciones():
 #-----------------------------VACUNAS-----------------------------------------
 @app.route('/vacunas')
 def Vacunas():
-    con = sqlite3.connect("DB/vacunas")
+    con = get_db()
     data=con.execute('SELECT id, nombre, dosis,edad_min,estado_id,intervalo FROM vacunas')
-    est=con.execute('SELECT * FROM estado WHERE id')
+    est=con.execute('SELECT * FROM estado ')
+    print(est)
     return render_template('vacunas/index.html', vacunas = data, estados=est)
 
 @app.route('/add_vacuna', methods=['POST'])
@@ -130,7 +131,7 @@ def indexConsulta2():
     con=get_db()
     cur=con.cursor()
     dato=cur.execute("SELECT id,nombre,apellido,dni,domicilio,fecha_nac,telefono FROM personas "+filtro,(valores)) 
-    return render_template('personas/personas_filtro.html', personas = dato)
+    return render_template('personas/index-personas.html', personas = dato)
 
 
 @app.route('/add_persona', methods = ['POST'])
