@@ -36,10 +36,9 @@ def deciciones():
 #-----------------------------VACUNAS-----------------------------------------
 @app.route('/vacunas')
 def Vacunas():
-    con = get_db()
+    con = sqlite3.connect("DB/vacunas")
     data=con.execute('SELECT id, nombre, dosis,edad_min,estado_id,intervalo FROM vacunas')
-    est=con.execute('SELECT * FROM estado ')
-    print(est)
+    est=con.execute('SELECT * FROM estado WHERE id')
     return render_template('vacunas/index.html', vacunas = data, estados=est)
 
 @app.route('/add_vacuna', methods=['POST'])
@@ -131,7 +130,7 @@ def indexConsulta2():
     con=get_db()
     cur=con.cursor()
     dato=cur.execute("SELECT id,nombre,apellido,dni,domicilio,fecha_nac,telefono FROM personas "+filtro,(valores)) 
-    return render_template('personas/index-personas.html', personas = dato)
+    return render_template('personas/personas_filtro.html', personas = dato)
 
 
 @app.route('/add_persona', methods = ['POST'])
@@ -195,6 +194,7 @@ def IndexRegistros():
     data=con.execute('select registros_vac.id, registros_vac.fecha_vacunacion, registros_vac.dosis ,personas.nombre ,personas.apellido, vacunas.nombre ,vacunatorio_id, lote FROM ((registros_vac INNER JOIN personas on registros_vac.persona_id=personas.id) INNER JOIN vacunas on vacunas.id=registros_vac.vacuna_id)')
     est=con.execute('SELECT * FROM estado WHERE id')
     pers = con.execute('SELECT id,nombre , apellido FROM personas') 
+    
     #fitrar registros por consulta de fecha
     if request.method == 'POST':
         print(request.form)
@@ -236,9 +236,9 @@ def IndexRegistros():
 
 @app.route('/group_by', methods = ['POST' ,'GET'])
 def By_Grupos():
-    con = get_db_biblioteca()
+    con = get_db()
     dato = con.execute('SELECT nombre_vacunatorio , count(nombre) as inmunizados FROM registros_completos GROUP by nombre')
-    pass
+    return render_template('registros/index_dona.html',registros=dato)
 
 
 

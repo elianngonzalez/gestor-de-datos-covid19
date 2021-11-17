@@ -1,0 +1,87 @@
+{% extends "registros/layout.html" %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-5">
+        <div>
+            <a href="/registros" class="btn btn-primary p-1"> atras </a>
+        </div>
+
+
+
+        <div class="card card-body">
+            <div id="grafico1"></div>
+
+            <div id="area-example"></div>
+            <div id="morris-bar-inf1"></div>
+
+
+
+        </div>
+    </div>
+    <div class="col-md-7 p-4">
+
+        <table id="tabla" class="table table-bordered table-dark">
+            <thead>
+                <tr>
+                    <td>Vacunatorio</td>
+                    <td>Inmunizados</td>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{registro.0}}</td>
+                    <td>{{registro.1}}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+    $(document).ready(function () {
+
+        var resume_table = document.getElementById("tabla");
+
+
+
+        var DataGrafico = [];
+        var cantidad = 0
+        var etiqueta = ''
+
+        for (var i = 1, row; row = resume_table.rows[i]; i++) {
+            col = row.cells[1]
+            cantidad = col.innerText
+            col = row.cells[0]
+            etiqueta = col.innerText
+            DataGrafico[i - 1] = {
+                value: cantidad,
+                label: etiqueta
+            }
+        }
+        console.log(DataGrafico);
+
+        var areachart1 = new Morris.Donut({
+            element: 'grafico1',
+            data: DataGrafico,
+            formatter: function (x) { return x + " inmunizados" }
+        }).on('click', function (i, row) {
+            console.log(i, row);
+        });
+
+
+    });
+
+</script>
+{% endblock %}
